@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Finance Dashboard - SolarEase{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h3 class="fw-bold text-white"><i class="fa-solid fa-sack-dollar text-success me-2"></i>Finance Officer Console</h3>
+        <span class="badge bg-success fs-6">Finance Portal</span>
+    </div>
+
+    <div class="row mb-4 g-3">
+        <div class="col-md-4"><div class="card p-3 bg-success text-white shadow-sm border-0 rounded-3"><span class="opacity-75">Total Revenue Recorded</span><h2 class="fw-bold mt-2">PKR {{ '{:,.0f}'.format(total_revenue) }}</h2></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-warning text-dark shadow-sm border-0 rounded-3"><span class="opacity-75">Pending Verification</span><h2 class="fw-bold mt-2">{{ pending_verification|length }}</h2></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-danger text-white shadow-sm border-0 rounded-3"><span class="opacity-75">Outstanding Balances</span><h2 class="fw-bold mt-2">PKR {{ '{:,.0f}'.format(outstanding) }}</h2></div></div>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4 mb-4">
+        <h4 class="fw-bold mb-3">Payments Awaiting Verification</h4>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead><tr><th>Ref #</th><th>Quotation</th><th>Method</th><th>Amount</th><th>Action</th></tr></thead>
+                <tbody>
+                {% for p in pending_verification %}
+                    <tr>
+                        <td>{{ p.trx_ref }}</td>
+                        <td>{{ p.quotation.quotation_number if p.quotation else '—' }}</td>
+                        <td>{{ p.payment_method }} ({{ p.payment_type }})</td>
+                        <td>PKR {{ '{:,.0f}'.format(p.amount_paid) }}</td>
+                        <td class="d-flex gap-2">
+                            <form action="{{ url_for('payments.verify_payment', payment_id=p.id) }}" method="POST"><input type="hidden" name="action" value="verify"><button class="btn btn-sm btn-success"><i class="fa-solid fa-check me-1"></i>Verify</button></form>
+                            <form action="{{ url_for('payments.verify_payment', payment_id=p.id) }}" method="POST"><input type="hidden" name="action" value="reject"><button class="btn btn-sm btn-outline-danger">Reject</button></form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" class="text-center text-muted py-3">No payments waiting on verification.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+        <h4 class="fw-bold mb-3">All Payment Records</h4>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead><tr><th>Ref #</th><th>Quotation</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody>
+                {% for p in payments %}
+                    <tr>
+                        <td>{{ p.trx_ref }}</td>
+                        <td>{{ p.quotation.quotation_number if p.quotation else '—' }}</td>
+                        <td>{{ p.payment_method }}</td>
+                        <td>PKR {{ '{:,.0f}'.format(p.amount_paid) }}</td>
+                        <td><span class="badge bg-{% if p.status in ['Fully Paid','Partially Paid'] %}success{% elif p.status=='Failed' %}danger{% else %}warning text-dark{% endif %}">{{ p.status }}</span></td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" class="text-center text-muted py-3">No payment records yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

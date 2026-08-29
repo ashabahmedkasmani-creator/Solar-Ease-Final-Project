@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{% endblock %}</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .purple-gradient { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
+    .sidebar-bg { background-color: #120e1e; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 antialiased h-screen w-screen overflow-hidden flex">
+
+  <!-- Left Sidebar (Full Height) -->
+  <aside class="w-64 sidebar-bg text-slate-300 p-6 flex flex-col justify-between shrink-0 h-full">
+    <div>
+      <!-- User Profile -->
+      <div class="flex items-center gap-3 mb-8">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" class="w-11 h-11 rounded-2xl object-cover ring-2 ring-purple-500/50" alt="User Avatar" />
+        <div>
+          {% if session.get('user_id') %}
+          <span class="text-[10px] font-extrabold uppercase text-purple-400 tracking-wider block uppercase">{{ session.get('role') }}</span>
+          <h4 class="text-sm font-bold text-white leading-tight">{{ session.get('user_name') }}</h4>
+          {% endif %}
+
+          
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <!-- <div class="space-y-6">
+        <div>
+          <p class="text-[11px] font-semibold text-slate-500 mb-3 tracking-wider uppercase">Menu</p>
+          <ul class="space-y-1.5 text-xs font-medium">
+            <li class="flex items-center gap-3 text-white bg-purple-600/30 px-3.5 py-2.5 rounded-xl border border-purple-500/30">
+              <i class="fa-solid fa-house text-purple-400"></i> Explore
+            </li>
+            <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer">
+              <i class="fa-solid fa-shapes text-slate-400"></i> Genres
+            </li>
+            <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer">
+              <i class="fa-solid fa-compact-disc text-slate-400"></i> Albums
+            </li>
+            <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer">
+              <i class="fa-solid fa-user-astronaut text-slate-400"></i> Artist
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-semibold text-slate-500 mb-3 tracking-wider uppercase">Library</p>
+          <ul class="space-y-1.5 text-xs font-medium">
+            <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer">
+              <i class="fa-regular fa-heart text-slate-400"></i> Favourites
+            </li>
+            <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer">
+              <i class="fa-solid fa-fire text-slate-400"></i> Popular
+            </li>
+            <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer">
+              <i class="fa-solid fa-folder text-slate-400"></i> My Music
+            </li>
+          </ul>
+        </div>
+      </div> -->
+    
+    
+      <div class="space-y-6" x-data="{ openDropdown: false }">
+        <!-- MENU SECTION -->
+        <div>
+          <p class="text-[11px] font-semibold text-slate-500 mb-3 tracking-wider uppercase">Menu</p>
+          <ul class="space-y-1.5 text-xs font-medium">
+
+            <!-- 1. Explore (IS KO DEKH KAR BAAKI COPY-PASTE KAR LEIN) -->
+            <a href="{{ url_for('sajid.dashboard') }}" class="block">
+              <li class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition cursor-pointer 
+                        {% if request.endpoint == 'sajid.dashboard' %}
+                          text-white bg-purple-600/30 border border-purple-500/30
+                        {% else %}
+                          text-slate-400 hover:text-white
+                        {% endif %}">
+                <i class="fa-solid fa-house {% if request.endpoint == 'sajid.dashboard' %}text-purple-400{% else %}text-slate-400{% endif %}"></i> 
+                Dashboard
+              </li>
+            </a>
+
+            <!-- 2. Genres (Dropdown Example) -->
+            <li class="relative">
+              <button @click="openDropdown = !openDropdown" 
+                      type="button"
+                      class="w-full flex items-center justify-between px-3.5 py-2 text-slate-400 hover:text-white transition cursor-pointer
+                      {% if request.endpoint == 'sajid.roles' %}
+                          text-white bg-purple-600/30 border border-purple-500/30 rounded-xl
+                        {% else %}
+                          text-slate-400 hover:text-white
+                        {% endif %}">
+                <div class="flex items-center gap-3">
+                  <i class="fa-solid fa-shapes text-slate-400"></i> Users
+                </div>
+                <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" :class="openDropdown ? 'rotate-180' : ''"></i>
+              </button>
+
+              <!-- Sub-menu Dropdown -->
+              <ul x-show="openDropdown" x-collapse class="pl-8 pt-1 space-y-1 text-slate-400 text-xs">
+                <li class="">
+                  <a href="{{ url_for('sajid.users') }}" class="block py-1.5 hover:text-white transition">Users</a>
+                </li>
+                <li class="">
+                  <a href="{{ url_for('sajid.roles') }}" class="block py-1.5 hover:text-white transition">Roles</a>
+                </li>
+                <li>
+                  <a href="#" class="block py-1.5 hover:text-white transition">Permissions</a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- 3. Albums -->
+            <a href="#" class="block">
+              <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
+                <i class="fa-solid fa-compact-disc text-slate-400"></i> Albums
+              </li>
+            </a>
+
+            <!-- 4. Artist -->
+            <a href="#" class="block">
+              <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
+                <i class="fa-solid fa-user-astronaut text-slate-400"></i> Artist
+              </li>
+            </a>
+
+            <!-- Dynamic Permission Item Example (Isme aap permission check change kar sakte hain) -->
+            {% if current_user.is_authenticated and current_user.has_permission('manage_inventory') %}
+            <a href="#" class="block">
+              <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
+                <i class="fa-solid fa-boxes-stacked text-slate-400"></i> Inventory
+              </li>
+            </a>
+            {% endif %}
+
+          </ul>
+        </div>
+
+        <!-- LIBRARY SECTION -->
+        <div>
+          <p class="text-[11px] font-semibold text-slate-500 mb-3 tracking-wider uppercase">Library</p>
+          <ul class="space-y-1.5 text-xs font-medium">
+
+            <a href="#" class="block">
+              <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
+                <i class="fa-regular fa-heart text-slate-400"></i> Favourites
+              </li>
+            </a>
+
+            <a href="#" class="block">
+              <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
+                <i class="fa-solid fa-fire text-slate-400"></i> Popular
+              </li>
+            </a>
+
+            <a href="#" class="block">
+              <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
+                <i class="fa-solid fa-folder text-slate-400"></i> My Music
+              </li>
+            </a>
+
+          </ul>
+        </div>
+      </div>
+    
+    </div>
+
+    <!-- Sidebar Bottom Mini Player Card -->
+    <div class="bg-purple-950/40 border border-purple-500/20 rounded-2xl p-3 text-white backdrop-blur-md">
+      <div class="flex items-center gap-3 mb-2">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" class="w-10 h-10 rounded-xl object-cover" alt="Album Art" />
+        <div class="overflow-hidden">
+          <h5 class="text-xs font-bold truncate">Balonku Ada...</h5>
+          <p class="text-[10px] text-slate-400 truncate">Bebas Alias</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between text-xs pt-2 border-t border-white/10">
+        <i class="fa-solid fa-backward-step cursor-pointer hover:text-purple-400"></i>
+        <button class="w-7 h-7 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs shadow-md">
+          <i class="fa-solid fa-pause"></i>
+        </button>
+        <i class="fa-solid fa-forward-step cursor-pointer hover:text-purple-400"></i>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Dashboard Area -->
+  <main class="flex-1 h-full overflow-y-auto custom-scrollbar p-6 md:p-8 relative bg-[#f8fafc]">
+    
+        {% block content %}{% endblock %}
+
+  </main>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>

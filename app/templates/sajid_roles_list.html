@@ -1,0 +1,192 @@
+{% extends 'sak.html' %}
+{% block title %}Manage Roles{% endblock %}
+{% block content %}
+<!-- <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h3 class="fw-bold text-danger"><i class="fa-solid fa-users-gear me-2"></i>Manage Users & Staff Roles</h3>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light btn-sm rounded-pill"><i class="fa-solid fa-arrow-left me-1"></i>Back to Dashboard</a>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4 mb-4">
+        <h4 class="fw-bold mb-3">Create Staff Account</h4>
+        <form action="{{ url_for('admin.create_user') }}" method="POST" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" class="form-control bg-dark text-white border-secondary" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control bg-dark text-white border-secondary" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Password</label>
+                <input type="text" name="password" class="form-control bg-dark text-white border-secondary" placeholder="Temporary password" required>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Role</label>
+                <select name="role" class="form-select bg-dark text-white border-secondary">
+                    {% for r in staff_roles %}
+                    <option value="{{ r }}">{{ label_for(r) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button class="btn btn-danger w-100 fw-bold"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+        <h4 class="fw-bold mb-3">All Users</h4>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead><tr><th>Name</th><th>Email</th><th>Current Role</th><th>Change Role</th></tr></thead>
+                <tbody>
+                {% for u in users %}
+                    <tr>
+                        <td>{{ u.full_name }}</td>
+                        <td>{{ u.email }}</td>
+                        <td><span class="badge bg-secondary">{{ label_for(u.role) }}</span></td>
+                        <td>
+                            <form action="{{ url_for('admin.update_role', user_id=u.id) }}" method="POST" class="d-flex gap-2">
+                                <select name="role" class="form-select form-select-sm bg-dark text-white border-secondary" style="width:200px;">
+                                    {% for r in roles %}
+                                    <option value="{{ r }}" {% if u.role==r %}selected{% endif %}>{{ label_for(r) }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button class="btn btn-sm btn-outline-light">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="text-center text-muted py-3">No users found.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> -->
+
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <h1 class="text-2xl font-bold text-slate-900">Roles</h1>
+      
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-100 border border-slate-200">
+          <i class="fa-regular fa-bell text-sm"></i>
+        </button>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="text" placeholder="Type here to search" class="pl-9 pr-4 py-2.5 text-xs bg-white rounded-full shadow-sm border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-400 w-64" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Center Main Content -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <div class="space-y-3">
+
+            {% for role in roles %}
+                <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100" class="w-11 h-11 rounded-full object-cover" alt="Artist" />
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-900">{{ role.label }}</h5>
+                            <p class="text-[10px] text-slate-400">{{ role.dashboard_endpoint }} • {{ role.permissions | length }}</p>
+                        </div>
+                        <div class="align-items-end">
+                            <a href="{{ url_for('sajid.edit_role_permissions', role_id=role.id) }}" class="p-2 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold rounded-xl " title="Edit Permissions">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <span class="text-center text-muted py-3">No roles found.</span>
+            {% endfor %}
+
+          </div>
+        
+
+      </div>
+
+      <!-- Right Column (Top Artists) -->
+      <div class="lg:col-span-4 space-y-6">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base mb-3">Add Role</h3>
+            <div class="space-y-3">
+                <!-- Vertical Form Card Container -->
+                <div class="bg-white border border-slate-100 p-5 rounded-2xl shadow-xl backdrop-blur-md">
+
+                <form action="" method="POST" class="flex flex-col gap-4">
+                    
+                    <!-- Full Name -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold tracking-wide text-300 uppercase">
+                            Name <span class="text-emerald-400">*</span>
+                        </label>
+                        <div class="relative group">
+                            <input 
+                            type="text" 
+                            name="name" 
+                            placeholder="sales"
+                            required 
+                            class="w-full px-4 py-2.5  text-sm rounded-xl border border-purple-500/20 placeholder:text-slate-600 shadow-inner transition-all duration-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 group-hover:border-slate-700"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold tracking-wide text-300 uppercase">
+                                Label <span class="text-emerald-400">*</span>
+                            </label>
+                            <div class="relative group">
+                                <input 
+                                type="text" 
+                                name="label" 
+                                placeholder="Sales Man"
+                                required 
+                                class="w-full px-4 py-2.5  text-sm rounded-xl border border-purple-500/20 placeholder:text-slate-600 shadow-inner transition-all duration-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 group-hover:border-slate-700"
+                                />
+                            </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold tracking-wide text-300 uppercase">
+                            Dashboard Endpoint <span class="text-emerald-400">*</span>
+                        </label>
+                        <div class="relative group">
+                            <input 
+                            type="text" 
+                            name="dashboard_endpoint"
+                            placeholder="sales.dashboard"
+                            required 
+                            class="w-full px-4 py-2.5  text-sm rounded-xl border border-purple-500/20 placeholder:text-slate-600 shadow-inner transition-all duration-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 group-hover:border-slate-700"
+                            />
+                        </div>
+                    </div>
+
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button 
+                            type="submit" 
+                            class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg shadow-emerald-500/20"
+                        >
+                            <i class="fa-solid fa-plus text-sm"></i>
+                            <span class="text-xs uppercase tracking-wider">Add Role</span>
+                        </button>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

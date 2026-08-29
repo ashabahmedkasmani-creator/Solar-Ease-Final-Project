@@ -1,0 +1,192 @@
+{% extends 'sak.html' %}
+{% block title %}Admin Dashboard - SolarEase{% endblock %}
+
+{% block content %}
+    
+    <!-- Top Bar -->
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <h1 class="text-2xl font-bold text-slate-900">Home</h1>
+      
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-100 border border-slate-200">
+          <i class="fa-regular fa-bell text-sm"></i>
+        </button>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="text" placeholder="Type here to search" class="pl-9 pr-4 py-2.5 text-xs bg-white rounded-full shadow-sm border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-400 w-64" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Center Main Content -->
+      <div class="lg:col-span-8 space-y-6">
+        
+        <!-- Hero Featured Banner -->
+        <div class="purple-gradient rounded-3xl p-8 text-white relative overflow-hidden flex items-center justify-between shadow-xl shadow-purple-500/10 min-h-[220px]">
+          <div class="max-w-xs space-y-3 relative z-10">
+            <span class="text-[10px] font-bold tracking-widest uppercase bg-white/20 px-2.5 py-1 rounded-md backdrop-blur-sm">Music Platform</span>
+            <h2 class="text-2xl md:text-3xl font-extrabold leading-tight">Listen to trending songs all the time</h2>
+            <p class="text-[11px] text-purple-100 font-light leading-relaxed">With MusicNaja, you can get premium music for free anywhere and at any time.</p>
+            <button class="bg-white text-purple-700 font-bold px-5 py-2.5 rounded-full text-xs shadow-md hover:bg-purple-50 transition">Explore Now</button>
+          </div>
+          <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=400" class="w-64 h-full object-cover absolute right-0 bottom-0 opacity-80 mix-blend-overlay hidden sm:block" alt="Banner Graphic" />
+        </div>
+
+        <!-- Playlist Section -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-slate-900 text-base">Playlist</h3>
+            <a href="#" class="text-xs font-semibold text-purple-600 hover:underline">See More</a>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <!-- Playlist Card 1 -->
+            <div class="relative group rounded-2xl overflow-hidden h-32 shadow-sm cursor-pointer">
+              <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-105 transition" alt="Playlist" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex flex-col justify-end text-white">
+                <p class="text-xs font-bold truncate">Musik Pagi</p>
+                <span class="text-[10px] text-slate-300">12 Tracks</span>
+              </div>
+            </div>
+            <!-- Playlist Card 2 -->
+            <div class="relative group rounded-2xl overflow-hidden h-32 shadow-sm cursor-pointer">
+              <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-105 transition" alt="Playlist" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex flex-col justify-end text-white">
+                <p class="text-xs font-bold truncate">Musik Asik</p>
+                <span class="text-[10px] text-slate-300">22 Tracks</span>
+              </div>
+            </div>
+            <!-- Playlist Card 3 -->
+            <div class="relative group rounded-2xl overflow-hidden h-32 shadow-sm cursor-pointer">
+              <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-105 transition" alt="Playlist" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex flex-col justify-end text-white">
+                <p class="text-xs font-bold truncate">Lofi Bass</p>
+                <span class="text-[10px] text-slate-300">18 Tracks</span>
+              </div>
+            </div>
+            <!-- Playlist Card 4 -->
+            <div class="relative group rounded-2xl overflow-hidden h-32 shadow-sm cursor-pointer">
+              <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-105 transition" alt="Playlist" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex flex-col justify-end text-white">
+                <p class="text-xs font-bold truncate">Anak Senja</p>
+                <span class="text-[10px] text-slate-300">25 Tracks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trending Tracks -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-slate-900 text-base">Trending</h3>
+            <a href="#" class="text-xs font-semibold text-purple-600 hover:underline">See More</a>
+          </div>
+
+          <div class="space-y-2">
+            <!-- Track 1 -->
+            <div class="flex items-center justify-between bg-white p-3 rounded-2xl shadow-sm hover:shadow transition">
+              <div class="flex items-center gap-4">
+                <span class="text-xs font-bold text-slate-400 w-4">01</span>
+                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=100" class="w-11 h-11 rounded-xl object-cover" alt="Track" />
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Balonku Ada 5 Meter</h5>
+                  <p class="text-[10px] text-slate-400">Maimunah • Dance Beat</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-5">
+                <span class="text-slate-400 text-xs">3:20</span>
+                <button class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-600 hover:text-white transition">
+                  <i class="fa-solid fa-play text-[10px]"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Track 2 -->
+            <div class="flex items-center justify-between bg-white p-3 rounded-2xl shadow-sm hover:shadow transition">
+              <div class="flex items-center gap-4">
+                <span class="text-xs font-bold text-slate-400 w-4">02</span>
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&q=80&w=100" class="w-11 h-11 rounded-xl object-cover" alt="Track" />
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Kucing Kesayangan</h5>
+                  <p class="text-[10px] text-slate-400">Maimunah • Electro Pop</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-5">
+                <span class="text-slate-400 text-xs">3:12</span>
+                <button class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-600 hover:text-white transition">
+                  <i class="fa-solid fa-play text-[10px]"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column (Top Artists) -->
+      <div class="lg:col-span-4 space-y-6">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base mb-3">Top Artist</h3>
+          <div class="space-y-3">
+            
+            <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl shadow-sm border border-slate-100">
+              <div class="flex items-center gap-3">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" class="w-11 h-11 rounded-full object-cover" alt="Artist" />
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Mamank</h5>
+                  <p class="text-[10px] text-slate-400">1928 Followers • 122M Plays</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl shadow-sm border border-slate-100">
+              <div class="flex items-center gap-3">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=100" class="w-11 h-11 rounded-full object-cover" alt="Artist" />
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Maimunah</h5>
+                  <p class="text-[10px] text-slate-400">1928 Followers • 50M Plays</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl shadow-sm border border-slate-100">
+              <div class="flex items-center gap-3">
+                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100" class="w-11 h-11 rounded-full object-cover" alt="Artist" />
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Paijo</h5>
+                  <p class="text-[10px] text-slate-400">1028 Followers • 32M Plays</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Floating Audio Player Widget -->
+    <!-- <div class="fixed bottom-6 right-6 w-80 sidebar-bg p-4 rounded-3xl text-white shadow-2xl border border-purple-500/30 z-50">
+      <div class="relative h-36 rounded-2xl overflow-hidden mb-3">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=300" class="w-full h-full object-cover" alt="Track Cover" />
+      </div>
+      
+      <div class="text-center mb-3">
+        <h4 class="text-xs font-bold">Balonku Ada 5 Meter</h4>
+        <p class="text-[10px] text-slate-400">Maimunah</p>
+      </div>
+
+      <div class="flex items-center justify-between px-4 text-slate-300 text-xs">
+        <i class="fa-solid fa-shuffle cursor-pointer hover:text-white"></i>
+        <i class="fa-solid fa-backward-step cursor-pointer hover:text-white"></i>
+        <button class="w-10 h-10 rounded-full bg-white text-purple-900 flex items-center justify-center shadow-lg hover:scale-105 transition">
+          <i class="fa-solid fa-pause"></i>
+        </button>
+        <i class="fa-solid fa-forward-step cursor-pointer hover:text-white"></i>
+        <i class="fa-solid fa-repeat cursor-pointer hover:text-white"></i>
+      </div>
+    </div> -->
+{% endblock %}

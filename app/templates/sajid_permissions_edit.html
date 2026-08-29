@@ -1,0 +1,67 @@
+{% extends 'sak.html' %}
+{% block title %}Edit Permission{% endblock %}
+{% block content %}
+
+
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <h1 class="text-2xl font-bold text-slate-900">Edit Permissions for: <span class="text-primary">"{{ role.label }}"</span></h1>
+      
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-100 border border-slate-200">
+          <i class="fa-regular fa-bell text-sm"></i>
+        </button>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="text" placeholder="Type here to search" class="pl-9 pr-4 py-2.5 text-xs bg-white rounded-full shadow-sm border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-400 w-64" />
+        </div>
+      </div>
+    </div>
+    <!-- Layout Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Center Main Content -->
+      <div class="lg:col-span-12 space-y-6">
+        <div class="space-y-3">
+            <form method="POST">
+                {% for category, perms in permissions_by_category.items() %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">{{ category }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for perm in perms %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                name="permissions" 
+                                                value="{{ perm.id }}" 
+                                                id="perm_{{ perm.id }}"
+                                                {% if perm in role.permissions %}checked{% endif %}>
+                                            <label class="form-check-label" for="perm_{{ perm.id }}">
+                                                <strong>{{ perm.label }}</strong><br>
+                                                <small class="text-muted"><code>{{ perm.name }}</code></small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- <button type="submit" class="btn btn-success btn-lg">Save {{ role.label }} Permissions</button> -->
+                <button 
+                    type="submit" 
+                    class="p-10 py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg shadow-emerald-500/20"
+                >
+                    <span class="text-xs uppercase tracking-wider">Save {{ role.label }} Permissions</span>
+                </button>
+            </form>
+        </div>
+      </div>
+    
+      
+
+    </div>
+{% endblock %}
