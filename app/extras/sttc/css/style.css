@@ -1,6 +1,0 @@
-body{background:#0b0d0f;color:#f5f5f5}.card{background:#15181c;border:1px solid #2b3036;color:#f5f5f5}.form-control,.form-select{background:#0f1215;color:#fff;border-color:#343a40}.form-control:focus,.form-select:focus{background:#0f1215;color:#fff}.table{vertical-align:middle}.hero{background:linear-gradient(135deg,#111820,#18220f);border:1px solid #29312a}
-.hero-wrapper{background:linear-gradient(135deg,#071410 0%,#0a1f16 50%,#0d1a17 100%)!important;border:1px solid rgba(18,165,102,0.3)!important;box-shadow:0 20px 50px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.03)!important}
-.badge-pill-custom{background:rgba(255,193,7,0.08)!important;backdrop-filter:blur(10px)}
-.stat-pill{background:rgba(18,165,102,0.05)!important;border:1px solid rgba(18,165,102,0.25)!important;transition:all .25s ease}
-.stat-pill:hover{border-color:rgba(37,240,151,0.5)!important;box-shadow:0 0 20px rgba(18,165,102,0.15);transform:translateY(-2px)}
-.stat-pill .rounded-circle{border:1px solid rgba(255,255,255,0.08)}.text-secondary{color:#9aa3ad!important}a{color:#8fd66b}footer{border-top:1px solid #24282d}
