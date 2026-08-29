@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Engineer Dashboard - SolarEase{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h3 class="fw-bold text-white"><i class="fa-solid fa-helmet-safety text-info me-2"></i>Solar Engineer Console</h3>
+        <span class="badge bg-info fs-6">Engineering Portal</span>
+    </div>
+
+    <div class="row mb-4 g-3">
+        <div class="col-md-4"><div class="card p-3 bg-warning text-dark shadow-sm border-0 rounded-3"><span class="opacity-75">Unassigned Surveys</span><h2 class="fw-bold mt-2">{{ unassigned|length }}</h2></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-primary text-white shadow-sm border-0 rounded-3"><span class="opacity-75">My Assigned Surveys</span><h2 class="fw-bold mt-2">{{ my_surveys|length }}</h2></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-success text-white shadow-sm border-0 rounded-3"><span class="opacity-75">Reports Completed</span><h2 class="fw-bold mt-2">{{ completed|length }}</h2></div></div>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4 mb-4">
+        <h4 class="fw-bold mb-3">Unassigned Survey Requests</h4>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead><tr><th>Survey #</th><th>Customer</th><th>Address</th><th>Preferred Date</th><th>Action</th></tr></thead>
+                <tbody>
+                {% for s in unassigned %}
+                    <tr>
+                        <td>SUR-{{ s.id }}</td><td>{{ s.customer_name }}</td><td>{{ s.address }}</td><td>{{ s.preferred_date }} ({{ s.preferred_time }})</td>
+                        <td>
+                            <form action="{{ url_for('surveys.claim_survey', survey_id=s.id) }}" method="POST">
+                                <button class="btn btn-sm btn-info text-dark fw-bold"><i class="fa-solid fa-hand me-1"></i>Take This Survey</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" class="text-center text-muted py-3">No unassigned survey requests right now.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+        <h4 class="fw-bold mb-3">My Site Surveys — Submit Technical Report</h4>
+        <div class="accordion" id="surveyAccordion">
+        {% for s in my_surveys %}
+            <div class="accordion-item bg-dark text-white border-secondary mb-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#survey{{ s.id }}">
+                        SUR-{{ s.id }} — {{ s.customer_name }} — {{ s.address }} — <span class="badge bg-secondary ms-2">{{ s.status }}</span>
+                    </button>
+                </h2>
+                <div id="survey{{ s.id }}" class="accordion-collapse collapse" data-bs-parent="#surveyAccordion">
+                    <div class="accordion-body">
+                        <form action="{{ url_for('surveys.update_survey', survey_id=s.id) }}" method="POST" class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Status</label>
+                                <select name="status" class="form-select bg-dark text-white border-secondary">
+                                    {% for st in ['Requested','Scheduled','Engineer Assigned','Survey In Progress','Survey Completed','Report Submitted','Cancelled'] %}
+                                    <option value="{{ st }}" {% if s.status==st %}selected{% endif %}>{{ st }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Roof Area (sq. ft)</label>
+                                <input type="number" step="0.1" name="roof_area" value="{{ s.roof_area }}" class="form-control bg-dark text-white border-secondary">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Recommended System (kW)</label>
+                                <input type="number" step="0.1" name="recommended_kw" value="{{ s.recommended_kw }}" class="form-control bg-dark text-white border-secondary">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Roof Direction</label>
+                                <input type="text" name="roof_direction" value="{{ s.roof_direction }}" class="form-control bg-dark text-white border-secondary">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Shading Conditions</label>
+                                <input type="text" name="shading" value="{{ s.shading }}" class="form-control bg-dark text-white border-secondary">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Engineer Notes / Technical Recommendations</label>
+                                <textarea name="report_notes" rows="3" class="form-control bg-dark text-white border-secondary">{{ s.report_notes }}</textarea>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-info text-dark fw-bold"><i class="fa-solid fa-floppy-disk me-1"></i>Save Technical Report</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted py-3">You have no assigned surveys yet — take one from the unassigned list above.</p>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

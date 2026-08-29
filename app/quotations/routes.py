@@ -1,5 +1,6 @@
 import math
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, make_response, send_file
+
 import io
 from app import db
 from app.models import Requirement, Quotation, Survey
@@ -36,12 +37,12 @@ def list_quotations():
     return render_template('quotation.html', quotations=quotations)
 
 @quotations_bp.route('/generate/<int:survey_id>', methods=['GET','POST'])
-@role_required('admin')
+@role_required('admin','sales')
 def generate_quotation(survey_id):
     survey=Survey.query.get_or_404(survey_id); kw=survey.recommended_kw or 5
     equipment=kw*170000; install=kw*25000; transport=20000; tax=(equipment+install)*0.05; discount=0; total=equipment+install+transport+tax-discount
     q=Quotation(survey_id=survey.id,quotation_number=f'QTN-2026-{Quotation.query.count()+1:05d}',system_capacity_kw=kw,system_type='Hybrid',equipment_cost=equipment,installation_cost=install,transport_cost=transport,tax=tax,discount=discount,final_amount=total,status='Pending')
-    survey.status='Survey Completed'; db.session.add(q); db.session.commit(); flash('Quotation generated successfully.','success'); return redirect(url_for('quotations.list_quotations'))
+    survey.status='Survey Completed'; db.session.add(q); db.session.commit(); flash('Quotation generated successfully.','success'); return redirect(url_for('sales.dashboard') if session.get('role')=='sales' else url_for('quotations.list_quotations'))
 
 @quotations_bp.route('/approve/<int:quotation_id>', methods=['POST'])
 @login_required

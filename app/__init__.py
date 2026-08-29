@@ -9,6 +9,10 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     db.init_app(app)
 
+    from app.roles import dashboard_for, label_for
+    app.jinja_env.globals['dashboard_for'] = dashboard_for
+    app.jinja_env.globals['label_for'] = label_for
+
     from app.auth.routes import auth_bp
     from app.customers.routes import customers_bp
     from app.sales.routes import sales_bp
@@ -64,6 +68,16 @@ def seed_data():
             Inventory(item_name='Lithium Battery 5kWh', category='Battery', brand='SolarEase', model='LFP-5', quantity=12, purchase_price=180000, selling_price=230000, minimum_stock=2),
             Inventory(item_name='DC Cable 6mm', category='Cable', brand='Generic', model='PV-6', quantity=200, purchase_price=250, selling_price=350, minimum_stock=30),
         ])
-    if User.query.filter_by(email='admin@solarease.pk').first() is None:
-        db.session.add(User(full_name='SolarEase Administrator', username='admin', email='admin@solarease.pk', password='admin123', role='admin'))
+    demo_staff = [
+        ('SolarEase Administrator', 'admin', 'admin@solarease.pk', 'admin123'),
+        ('Ayesha Khan', 'sales1', 'sales@solarease.pk', 'sales123'),
+        ('Bilal Ahmed', 'engineer1', 'engineer@solarease.pk', 'engineer123'),
+        ('Usman Tariq', 'technician1', 'technician@solarease.pk', 'technician123'),
+        ('Sara Malik', 'inventory1', 'inventory@solarease.pk', 'inventory123'),
+        ('Hamza Sheikh', 'finance1', 'finance@solarease.pk', 'finance123'),
+    ]
+    roles_by_username = {'admin':'admin','sales1':'sales','engineer1':'engineer','technician1':'technician','inventory1':'inventory_manager','finance1':'finance'}
+    for full_name, username, email, password in demo_staff:
+        if User.query.filter_by(email=email).first() is None:
+            db.session.add(User(full_name=full_name, username=username, email=email, password=password, role=roles_by_username[username]))
     db.session.commit()

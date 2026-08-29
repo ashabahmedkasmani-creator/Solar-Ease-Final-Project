@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Technician Dashboard - SolarEase{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h3 class="fw-bold text-white"><i class="fa-solid fa-screwdriver-wrench text-warning me-2"></i>Installation Technician Console</h3>
+        <span class="badge bg-warning text-dark fs-6">Field Team Portal</span>
+    </div>
+
+    <div class="row mb-4 g-3">
+        <div class="col-md-4"><div class="card p-3 bg-secondary text-white shadow-sm border-0 rounded-3"><span class="opacity-75">Unassigned Projects</span><h2 class="fw-bold mt-2">{{ unassigned|length }}</h2></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-primary text-white shadow-sm border-0 rounded-3"><span class="opacity-75">My Active Projects</span><h2 class="fw-bold mt-2">{{ in_progress|length }}</h2></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-success text-white shadow-sm border-0 rounded-3"><span class="opacity-75">Completed by Me</span><h2 class="fw-bold mt-2">{{ completed|length }}</h2></div></div>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4 mb-4">
+        <h4 class="fw-bold mb-3">Unassigned Installation Projects</h4>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead><tr><th>Project</th><th>Capacity</th><th>Address</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>
+                {% for p in unassigned %}
+                    <tr>
+                        <td>PRJ-{{ p.id }}</td><td>{{ p.capacity_kw }} kW</td><td>{{ p.address or '—' }}</td><td><span class="badge bg-secondary">{{ p.status }}</span></td>
+                        <td><form action="{{ url_for('installations.claim_installation', installation_id=p.id) }}" method="POST"><button class="btn btn-sm btn-warning text-dark fw-bold"><i class="fa-solid fa-hand me-1"></i>Take This Job</button></form></td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" class="text-center text-muted py-3">No unassigned projects right now.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+        <h4 class="fw-bold mb-3">My Assigned Installations — Checklist & Progress</h4>
+        <div class="accordion" id="projAccordion">
+        {% for p in my_projects %}
+            <div class="accordion-item bg-dark text-white border-secondary mb-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#proj{{ p.id }}">
+                        PRJ-{{ p.id }} — {{ p.capacity_kw }} kW — {{ p.address or 'No address on file' }} — <span class="badge bg-warning text-dark ms-2">{{ p.status }}</span>
+                    </button>
+                </h2>
+                <div id="proj{{ p.id }}" class="accordion-collapse collapse" data-bs-parent="#projAccordion">
+                    <div class="accordion-body">
+                        <form action="{{ url_for('installations.update', installation_id=p.id) }}" method="POST" class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Installation Stage</label>
+                                <select name="status" class="form-select bg-dark text-white border-secondary">
+                                    {% for st in ['Project Created','Equipment Reserved','Installation Scheduled','Team Assigned','Installation Started','Panels Installed','Inverter Installed','Wiring Completed','Testing In Progress','Customer Handover','Completed & Handover'] %}
+                                    <option value="{{ st }}" {% if p.status==st %}selected{% endif %}>{{ st }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Site Notes</label>
+                                <input type="text" name="notes" value="{{ p.notes }}" class="form-control bg-dark text-white border-secondary" placeholder="e.g. Panels aligned, earthing completed, customer trained">
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-warning text-dark fw-bold"><i class="fa-solid fa-floppy-disk me-1"></i>Update Progress</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted py-3">You have no assigned installations yet — take one from the unassigned list above.</p>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

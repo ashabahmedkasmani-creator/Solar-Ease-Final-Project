@@ -5,7 +5,10 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-danger"><i class="fa-solid fa-user-shield me-2"></i>SolarEase Administration Console</h3>
-        <span class="badge bg-danger fs-6">Administrator Portal</span>
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ url_for('admin.users') }}" class="btn btn-outline-light btn-sm rounded-pill"><i class="fa-solid fa-users-gear me-1"></i>Manage Users & Roles</a>
+            <span class="badge bg-danger fs-6">Administrator Portal</span>
+        </div>
     </div>
 
     <div class="row mb-4">
