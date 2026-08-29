@@ -168,7 +168,7 @@
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-solar py-3">
             <div class="container">
-                <a class="navbar-brand brand-logo" href="{{ url_for('admin.dashboard') }}">
+                <a class="navbar-brand brand-logo" href="{{ url_for('index') }}">
                     <div class="brand-icon-box">
                         <i class="fa-solid fa-sun"></i>
                     </div>
@@ -181,21 +181,25 @@
 
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 my-3 my-lg-0">
+                        {% if session.get('user_id') %}
                         <li class="nav-item">
-                            <a class="nav-link nav-link-custom" href="{{ url_for('admin.dashboard') }}">
+                            <a class="nav-link nav-link-custom" href="{{ url_for('admin.dashboard') if session.get('role') == 'admin' else url_for('customers.dashboard') }}">
                                 <i class="fa-solid fa-house me-1"></i> Dashboard
                             </a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link nav-link-custom" href="{{ url_for('quotations.calculator') }}">
                                 <i class="fa-solid fa-calculator me-1"></i> Load Calculator
                             </a>
                         </li>
+                        {% if session.get('role') == 'admin' %}
                         <li class="nav-item">
                             <a class="nav-link nav-link-custom" href="{{ url_for('inventory.stock') }}">
                                 <i class="fa-solid fa-box-open me-1"></i> Inventory
                             </a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link nav-link-custom" href="{{ url_for('surveys.index') }}">
                                 <i class="fa-solid fa-calendar-check me-1"></i> Book Survey
@@ -204,9 +208,13 @@
                     </ul>
 
                     <div class="d-flex align-items-center gap-2">
-                        <a href="{{ url_for('quotations.calculator') }}" class="btn btn-vip-emerald fw-bold rounded-pill px-4 py-2">
-                            <i class="fa-solid fa-bolt me-1 text-warning"></i> Get Estimate
-                        </a>
+                        {% if session.get('user_id') %}
+                            <span class="nav-link-custom me-2">Hi, {{ session.get('user_name') }}</span>
+                            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm rounded-pill px-3">Logout</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm rounded-pill px-3 me-1">Login</a>
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-vip-emerald fw-bold rounded-pill px-3">Register</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -244,7 +252,7 @@
                 <!-- Quick Navigation -->
                 <div class="col-lg-2 col-md-6 footer-links">
                     <h6>Quick Links</h6>
-                    <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('admin.dashboard') if session.get('role') == 'admin' else url_for('customers.dashboard') }}">Dashboard</a>
                     <a href="{{ url_for('quotations.calculator') }}">Load Calculator</a>
                     <a href="{{ url_for('inventory.stock') }}">Equipment Stock</a>
                     <a href="{{ url_for('surveys.index') }}">Book Site Visit</a>

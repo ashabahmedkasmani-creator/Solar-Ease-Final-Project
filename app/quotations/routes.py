@@ -3,9 +3,11 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 import io
 from app import db
 from app.models import Requirement, Quotation, Survey
+from app.auth.decorators import login_required, role_required
 quotations_bp=Blueprint('quotations',__name__)
 
 @quotations_bp.route('/calculator', methods=['GET','POST'])
+@login_required
 def calculator():
     result=None
     if request.method=='POST':
@@ -20,9 +22,21 @@ def calculator():
     return render_template('requirement_form.html',result=result)
 
 @quotations_bp.route('/')
-def list_quotations(): return render_template('quotation.html',quotations=Quotation.query.order_by(Quotation.id.desc()).all())
+@login_required
+def list_quotations():
+    if session.get('role') == 'admin':
+        quotations = Quotation.query.order_by(Quotation.id.desc()).all()
+    else:
+        uid = session.get('user_id')
+        quotations = (Quotation.query
+                      .outerjoin(Survey, Quotation.survey_id == Survey.id)
+                      .outerjoin(Requirement, Quotation.requirement_id == Requirement.id)
+                      .filter(db.or_(Survey.user_id == uid, Requirement.user_id == uid))
+                      .order_by(Quotation.id.desc()).all())
+    return render_template('quotation.html', quotations=quotations)
 
 @quotations_bp.route('/generate/<int:survey_id>', methods=['GET','POST'])
+@role_required('admin')
 def generate_quotation(survey_id):
     survey=Survey.query.get_or_404(survey_id); kw=survey.recommended_kw or 5
     equipment=kw*170000; install=kw*25000; transport=20000; tax=(equipment+install)*0.05; discount=0; total=equipment+install+transport+tax-discount
@@ -30,14 +44,17 @@ def generate_quotation(survey_id):
     survey.status='Survey Completed'; db.session.add(q); db.session.commit(); flash('Quotation generated successfully.','success'); return redirect(url_for('quotations.list_quotations'))
 
 @quotations_bp.route('/approve/<int:quotation_id>', methods=['POST'])
+@login_required
 def approve(quotation_id):
     q=Quotation.query.get_or_404(quotation_id); q.status='Approved'; db.session.commit(); flash('Quotation approved. Proceed to payment.','success'); return redirect(url_for('payments.history'))
 
 @quotations_bp.route('/reject/<int:quotation_id>', methods=['POST'])
+@login_required
 def reject(quotation_id):
     q=Quotation.query.get_or_404(quotation_id); q.status='Rejected'; db.session.commit(); flash('Quotation rejected.','warning'); return redirect(url_for('quotations.list_quotations'))
 
 @quotations_bp.route('/pdf/<int:quotation_id>')
+@login_required
 def pdf(quotation_id):
     q=Quotation.query.get_or_404(quotation_id)
     try:
