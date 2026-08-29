@@ -10,6 +10,8 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(30), default='customer', nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
+    role_rel = db.relationship('Role', backref='users')
 
 class Requirement(db.Model):
     __tablename__ = 'requirements'
@@ -143,3 +145,37 @@ class MaintenanceRequest(db.Model):
     issue_description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(30), default='Open')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+# 
+class Customer(db.Model):
+    __tablename__ = 'customers'
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(30), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    address = db.Column(db.Text, nullable=True)
+    city = db.Column(db.String(80), default='Karachi')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    role_permissions = db.Table('role_permissions',
+    db.Column('role_id', db.Integer, db.ForeignKey('roles.id'), primary_key=True),
+    db.Column('permission_id', db.Integer, db.ForeignKey('permissions.id'), primary_key=True)
+)
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    label = db.Column(db.String(100), nullable=False)
+    dashboard_endpoint = db.Column(db.String(100), nullable=False)
+    is_staff = db.Column(db.Boolean, default=True)
+    permissions = db.relationship('Permission', secondary=role_permissions, backref=db.backref('roles', lazy='dynamic'))
+
+class Permission(db.Model):
+    __tablename__ = 'permissions'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    label = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(50), default='General')
