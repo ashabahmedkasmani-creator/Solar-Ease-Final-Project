@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Solar System Types - SolarEase{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4 text-white"><i class="fa-solid fa-solar-panel text-success me-2"></i>Solar System Types</h3>
+    <div class="row g-4">
+        {% for sys in systems %}
+        <div class="col-md-4">
+            <div class="card bg-dark text-white h-100 border-secondary p-4 rounded-4 shadow-lg">
+                <h4 class="fw-bold text-success mb-3">{{ sys.name }}</h4>
+                <p class="text-muted small mb-3">{{ sys.description }}</p>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><strong>Battery:</strong> {{ sys.battery }}</li>
+                    <li class="mb-2"><strong>Grid Connected:</strong> {{ sys.grid }}</li>
+                    <li class="mb-2"><strong>Backup:</strong> {{ sys.backup }}</li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

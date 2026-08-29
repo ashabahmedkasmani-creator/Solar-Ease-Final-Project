@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Installation Progress - SolarEase{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4 text-white">
+        <i class="fa-solid fa-bars-progress text-success me-2"></i>Installation Progress Tracking
+    </h3>
+
+    {% if projects %}
+        {% for proj in projects %}
+        <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h4 class="fw-bold text-white mb-0">Project #PRJ-{{ proj.id }} ({{ proj.capacity_kw }} kW System)</h4>
+                <span class="badge bg-success px-3 py-2 fs-6 rounded-pill">{{ proj.status }}</span>
+            </div>
+
+            <!-- Dynamic Progress Bar Calculation -->
+            {% set progress = 15 %}
+            {% if proj.status == 'Equipment Reserved' %}{% set progress = 35 %}{% endif %}
+            {% if proj.status == 'Panels Installed' %}{% set progress = 65 %}{% endif %}
+            {% if proj.status == 'Inverter & Wiring' %}{% set progress = 85 %}{% endif %}
+            {% if proj.status == 'Completed & Handover' %}{% set progress = 100 %}{% endif %}
+
+            <div class="progress mb-4 bg-secondary bg-opacity-20 rounded-pill" style="height: 24px; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="progress-bar progress-bar-striped progress-bar-animated fw-bold" role="progressbar" style="width: {{ progress }}%; background-color: #12A566;">
+                    {{ progress }}% Completed
+                </div>
+            </div>
+
+            <!-- Visual Milestone Tracker -->
+            <div class="row text-center border-top border-secondary pt-4 gy-3">
+                <div class="col-6 col-md-2">
+                    <i class="fa-solid fa-circle-check text-success fa-2x mb-2"></i>
+                    <div><small class="text-light opacity-90 fw-semibold">Survey Done</small></div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <i class="fa-solid fa-circle-check text-success fa-2x mb-2"></i>
+                    <div><small class="text-light opacity-90 fw-semibold">Advance Paid</small></div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <i class="fa-solid fa-boxes-stacked fa-2x mb-2 {% if progress >= 35 %}text-success{% else %}text-muted opacity-50{% endif %}"></i>
+                    <div><small class="{% if progress >= 35 %}text-light opacity-90 fw-semibold{% else %}text-muted{% endif %}">Equipment Reserved</small></div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <i class="fa-solid fa-solar-panel fa-2x mb-2 {% if progress >= 65 %}text-success{% else %}text-muted opacity-50{% endif %}"></i>
+                    <div><small class="{% if progress >= 65 %}text-light opacity-90 fw-semibold{% else %}text-muted{% endif %}">Panels Mounted</small></div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <i class="fa-solid fa-plug-circle-bolt fa-2x mb-2 {% if progress >= 85 %}text-success{% else %}text-muted opacity-50{% endif %}"></i>
+                    <div><small class="{% if progress >= 85 %}text-light opacity-90 fw-semibold{% else %}text-muted{% endif %}">Wiring & Testing</small></div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <i class="fa-solid fa-house-circle-check fa-2x mb-2 {% if progress >= 100 %}text-success{% else %}text-muted opacity-50{% endif %}"></i>
+                    <div><small class="{% if progress >= 100 %}text-light opacity-90 fw-semibold{% else %}text-muted{% endif %}">Final Handover</small></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info bg-dark text-info border border-info p-4 rounded-3">
+            <i class="fa-solid fa-info-circle me-2"></i> No active installation project found yet. Once your payment is recorded, your installation timeline will appear here.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

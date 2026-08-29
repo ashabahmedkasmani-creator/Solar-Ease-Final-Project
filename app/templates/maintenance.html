@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Maintenance & Support - SolarEase{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4 text-white">
+        <i class="fa-solid fa-screwdriver-wrench text-warning me-2"></i>Maintenance & Support
+    </h3>
+
+    <div class="row g-4">
+        <!-- Request Form -->
+        <div class="col-md-5">
+            <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+                <h4 class="fw-bold mb-3 text-warning">
+                    <i class="fa-solid fa-wrench me-2"></i>Request Service / Repair
+                </h4>
+                <form action="{{ url_for('maintenance.list_requests') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-light">Service Category</label>
+                        <select name="issue_type" class="form-select bg-dark text-white border-secondary" required>
+                            <option value="Solar Panel Cleaning">Solar Panel Cleaning</option>
+                            <option value="Low Power Generation">Low Power Generation</option>
+                            <option value="Inverter Error / Red Light">Inverter Error / Red Light</option>
+                            <option value="Battery Backup Issue">Battery Backup Issue</option>
+                            <option value="General Inspection / AMC">General Inspection / Annual Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-light">Describe Problem</label>
+                        <textarea name="description" class="form-control bg-dark text-white border-secondary" rows="4" placeholder="Provide details about the issue..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 fw-bold py-2.5 text-dark rounded-3 shadow">
+                        <i class="fa-solid fa-paper-plane me-2"></i>Submit Request
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tickets List -->
+        <div class="col-md-7">
+            <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+                <h4 class="fw-bold mb-3 text-white">Your Maintenance Tickets</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="border-secondary text-muted">
+                                <th>Ticket ID</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Submitted Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-secondary">
+                            {% for req in maintenance_requests %}
+                            <tr>
+                                <td class="fw-bold text-success">#MNT-{{ req.id }}</td>
+                                <td>{{ req.service_type }}</td>
+                                <td>
+                                    <span class="badge bg-{% if req.status=='Resolved' %}success{% else %}warning text-dark{% endif %} px-2.5 py-1.5">
+                                        {{ req.status }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">{{ req.created_at }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-inbox fa-2x mb-2 d-block opacity-50"></i>
+                                    No service requests submitted yet.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

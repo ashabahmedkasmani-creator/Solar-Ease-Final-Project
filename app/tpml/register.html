@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Register - SolarEase{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-20 text-success rounded-circle p-3 mb-2" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-user-plus fa-xl"></i>
+                    </div>
+                    <h3 class="fw-bold text-white mt-2">Create Account</h3>
+                    <p class="text-muted small">Join SolarEase to start managing your solar power solutions</p>
+                </div>
+
+                <form action="{{ url_for('auth.register') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-light">Full Name</label>
+                        <input type="text" name="name" class="form-control bg-dark text-white border-secondary py-2" required placeholder="e.g. Ashab Ahmed">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-light">Email Address</label>
+                        <input type="email" name="email" class="form-control bg-dark text-white border-secondary py-2" required placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-light">Phone Number</label>
+                        <input type="text" name="phone" class="form-control bg-dark text-white border-secondary py-2" required placeholder="0300-1234567">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-light">Password</label>
+                        <input type="password" name="password" class="form-control bg-dark text-white border-secondary py-2" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 text-white rounded-3 shadow" style="background-color: #12A566; border: none;">
+                        Register Account
+                    </button>
+                </form>
+
+                <div class="text-center mt-4 border-top border-secondary pt-3">
+                    <p class="text-muted mb-0 small">
+                        Already registered? <a href="{{ url_for('auth.login') }}" class="text-success fw-bold text-decoration-none">Login Here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

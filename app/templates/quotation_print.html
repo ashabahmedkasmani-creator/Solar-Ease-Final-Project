@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>{{ q.quotation_number }}</title></head>
+<body style="font-family: Arial, sans-serif; padding: 30px;">
+    <h2>SolarEase</h2>
+    <h3>Quotation {{ q.quotation_number }}</h3>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr><td>System</td><td>{{ q.system_capacity_kw }} kW {{ q.system_type }}</td></tr>
+        <tr><td>Equipment Cost</td><td>PKR {{ '{:,.0f}'.format(q.equipment_cost) }}</td></tr>
+        <tr><td>Installation</td><td>PKR {{ '{:,.0f}'.format(q.installation_cost) }}</td></tr>
+        <tr><td>Transport</td><td>PKR {{ '{:,.0f}'.format(q.transport_cost) }}</td></tr>
+        <tr><td>Tax</td><td>PKR {{ '{:,.0f}'.format(q.tax) }}</td></tr>
+        <tr><td>Discount</td><td>PKR {{ '{:,.0f}'.format(q.discount) }}</td></tr>
+        <tr><td><strong>Final Amount</strong></td><td><strong>PKR {{ '{:,.0f}'.format(q.final_amount) }}</strong></td></tr>
+        <tr><td>Payment Terms</td><td>{{ q.payment_terms }}</td></tr>
+        <tr><td>Warranty</td><td>{{ q.warranty_terms }}</td></tr>
+    </table>
+</body>
+</html>
