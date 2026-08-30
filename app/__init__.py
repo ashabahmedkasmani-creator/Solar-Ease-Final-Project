@@ -21,6 +21,7 @@ def create_app(config_class=Config):
     from app.warranties.routes import warranties_bp
     from app.admin.routes import admin_bp
     from app.api.routes import api_bp
+    from app.sajid.routes import sajid_bp
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(customers_bp, url_prefix='/customer')
@@ -34,6 +35,7 @@ def create_app(config_class=Config):
     app.register_blueprint(warranties_bp, url_prefix='/warranties')
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(sajid_bp, url_prefix='/sajid')
 
     @app.route('/')
     def index():

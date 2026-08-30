@@ -139,13 +139,13 @@
             </a>
 
             <!-- Dynamic Permission Item Example (Isme aap permission check change kar sakte hain) -->
-            {% if current_user.is_authenticated and current_user.has_permission('manage_inventory') %}
+            
             <a href="#" class="block">
               <li class="flex items-center gap-3 hover:text-white px-3.5 py-2 transition cursor-pointer text-slate-400">
                 <i class="fa-solid fa-boxes-stacked text-slate-400"></i> Inventory
               </li>
             </a>
-            {% endif %}
+            
 
           </ul>
         </div>

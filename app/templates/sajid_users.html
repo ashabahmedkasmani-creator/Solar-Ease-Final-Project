@@ -9,7 +9,7 @@
 
     <div class="card bg-dark text-white p-4 shadow-lg border border-secondary rounded-4 mb-4">
         <h4 class="fw-bold mb-3">Create Staff Account</h4>
-        <form action="{{ url_for('admin.create_user') }}" method="POST" class="row g-3">
+        <form action="" method="POST" class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">Full Name</label>
                 <input type="text" name="full_name" class="form-control bg-dark text-white border-secondary" required>
@@ -48,7 +48,7 @@
                         <td>{{ u.email }}</td>
                         <td><span class="badge bg-secondary">{{ label_for(u.role) }}</span></td>
                         <td>
-                            <form action="{{ url_for('admin.update_role', user_id=u.id) }}" method="POST" class="d-flex gap-2">
+                            <form action="" method="POST" class="d-flex gap-2">
                                 <select name="role" class="form-select form-select-sm bg-dark text-white border-secondary" style="width:200px;">
                                     {% for r in roles %}
                                     <option value="{{ r }}" {% if u.role==r %}selected{% endif %}>{{ label_for(r) }}</option>
@@ -115,7 +115,7 @@
           <!-- <div class="space-y-3">
 
                 <div class="flex items-center justify-between bg-white p-3.5 rounded-2xl shadow-sm border border-slate-100">
-            <form action="{{ url_for('admin.create_user') }}" method="POST" class="row g-3">
+            <form action="{{ url_for('sajid.create_user') }}" method="POST" class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">Full Name</label>
                 <input type="text" name="full_name" class="form-control bg-dark text-white border-secondary" required>
@@ -149,7 +149,7 @@
                 <!-- Vertical Form Card Container -->
                 <div class="bg-white border border-slate-100 p-5 rounded-2xl shadow-xl backdrop-blur-md">
 
-                <form action="{{ url_for('admin.create_user') }}" method="POST" class="flex flex-col gap-4">
+                <form action="{{ url_for('sajid.create_user') }}" method="POST" class="flex flex-col gap-4">
                     
                     <!-- Full Name -->
                     <div class="flex flex-col gap-1.5">

@@ -148,18 +148,14 @@ class MaintenanceRequest(db.Model):
 
 
 # 
-class Customer(db.Model):
-    __tablename__ = 'customers'
+class Permission(db.Model):
+    __tablename__ = 'permissions'
     id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(30), nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    address = db.Column(db.Text, nullable=True)
-    city = db.Column(db.String(80), default='Karachi')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    label = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(50), default='General')
 
-    role_permissions = db.Table('role_permissions',
+role_permissions = db.Table('role_permissions',
     db.Column('role_id', db.Integer, db.ForeignKey('roles.id'), primary_key=True),
     db.Column('permission_id', db.Integer, db.ForeignKey('permissions.id'), primary_key=True)
 )
@@ -173,9 +169,13 @@ class Role(db.Model):
     is_staff = db.Column(db.Boolean, default=True)
     permissions = db.relationship('Permission', secondary=role_permissions, backref=db.backref('roles', lazy='dynamic'))
 
-class Permission(db.Model):
-    __tablename__ = 'permissions'
+class Customer(db.Model):
+    __tablename__ = 'customers'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True, nullable=False)
-    label = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String(50), default='General')
+    full_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(30), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    address = db.Column(db.Text, nullable=True)
+    city = db.Column(db.String(80), default='Karachi')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

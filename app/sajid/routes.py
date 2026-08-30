@@ -96,27 +96,27 @@ def edit_role_permissions(role_id):
 
 
 
-# @admin_bp.route('/users/create', methods=['POST'])
-# @role_required('admin')
-# def create_user():
-#     full_name = request.form.get('full_name','').strip()
-#     email = request.form.get('email','').strip().lower()
-#     role = request.form.get('role','sales')
-#     password = request.form.get('password','changeme123')
-#     if role not in STAFF_ROLES:
-#         flash('Invalid staff role selected.', 'danger'); return redirect(url_for('admin.users'))
-#     if User.query.filter_by(email=email).first():
-#         flash('A user with that email already exists.', 'warning'); return redirect(url_for('admin.users'))
-#     try:
-#         user = User(full_name=full_name, username=unique_username(email.split('@')[0]), email=email,
-#                     password=generate_password_hash(password), role=role)
-#         db.session.add(user); db.session.commit()
-#     except Exception:
-#         db.session.rollback()
-#         flash('Something went wrong while creating that account. Please try again.', 'danger')
-#         return redirect(url_for('admin.users'))
-#     flash(f'{label_for(role)} account created for {full_name}.', 'success')
-#     return redirect(url_for('admin.users'))
+@sajid_bp.route('/users/create', methods=['POST'])
+@role_required('admin')
+def create_user():
+    full_name = request.form.get('full_name','').strip()
+    email = request.form.get('email','').strip().lower()
+    role = request.form.get('role','sales')
+    password = request.form.get('password','changeme123')
+    if role not in STAFF_ROLES:
+        flash('Invalid staff role selected.', 'danger'); return redirect(url_for('admin.users'))
+    if User.query.filter_by(email=email).first():
+        flash('A user with that email already exists.', 'warning'); return redirect(url_for('admin.users'))
+    try:
+        user = User(full_name=full_name, username=unique_username(email.split('@')[0]), email=email,
+                    password=generate_password_hash(password), role=role)
+        db.session.add(user); db.session.commit()
+    except Exception:
+        db.session.rollback()
+        flash('Something went wrong while creating that account. Please try again.', 'danger')
+        return redirect(url_for('admin.users'))
+    flash(f'{label_for(role)} account created for {full_name}.', 'success')
+    return redirect(url_for('admin.users'))
 
 # @admin_bp.route('/users/role/<int:user_id>', methods=['POST'])
 # @role_required('admin')
